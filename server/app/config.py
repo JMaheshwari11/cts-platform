@@ -44,7 +44,8 @@ class Settings(BaseSettings):
         return PROCESSED_DIR / self.parquet_file
 
     @property
-    def cors_origins_list(self) -> Listraw = (self.cors_origins or "").strip()
+    def cors_origins_list(self) -> List[str]:
+        raw = (self.cors_origins or "").strip()
         if not raw:
             return ["*"]
         return [o.strip() for o in raw.split(",") if o.strip()]
