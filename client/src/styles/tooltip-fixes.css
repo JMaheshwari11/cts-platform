@@ -1,0 +1,20 @@
+/* Tooltip fixes — ensures Info icon and its trigger never get clipped.
+   Imported by main.jsx so it loads after index.css. */
+
+/* The kpi-label must allow the Info icon trigger to render fully,
+   even though the surrounding kpi-card has overflow: hidden.
+   The actual tooltip is portaled to document.body so the parent
+   overflow doesn't matter, but the trigger icon needs to stay clickable. */
+.kpi-label {
+  overflow: visible !important;
+}
+
+/* Same for the chart-title row in case tooltips are added there */
+.chart-title {
+  overflow: visible;
+}
+
+/* Make sure the Info icon never gets accidentally hidden */
+[role="tooltip"] {
+  pointer-events: none;
+}
