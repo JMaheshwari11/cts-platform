@@ -496,13 +496,13 @@ export default function TierFlowDiagram({ compact = false }) {
             <div>
               <div className="text-[9px] uppercase tracking-wider text-white/40 font-semibold">Total Shipments</div>
               <div className="text-base font-bold text-white">
-                {formatNumber(tiers.reduce((s, t) => s + (t.shipments_out || 0), 0))}
+                {formatNumber(Array.isArray(tiers) ? tiers.reduce((s, t) => s + (t.shipments_out || 0), 0) : 0)}
               </div>
             </div>
             <div>
               <div className="text-[9px] uppercase tracking-wider text-white/40 font-semibold">Total Cost</div>
               <div className="text-base font-bold text-white">
-                {formatCurrency(tiers.reduce((s, t) => s + (t.total_cost_out || 0), 0))}
+                {formatCurrency(Array.isArray(tiers) ? tiers.reduce((s, t) => s + (t.total_cost_out || 0), 0) : 0)}
               </div>
             </div>
           </div>

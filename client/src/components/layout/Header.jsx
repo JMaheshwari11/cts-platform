@@ -8,7 +8,7 @@ export default function Header() {
   const { darkMode, toggleDarkMode, toggleSearch, toggleAlerts } = useAppStore()
   const { openPanel: openAI } = useAIStore()
   const { data: alerts } = useAlerts()
-  const alertCount = alerts?.reduce((s, a) => s + (a.severity === "high" ? 1 : 0), 0) || 0
+  const alertCount = Array.isArray(alerts) ? alerts.reduce((s, a) => s + (a.severity === "high" ? 1 : 0), 0) : 0
 
   return (
     <header className="app-header h-16 px-6 flex items-center justify-between sticky top-0 z-30 relative">

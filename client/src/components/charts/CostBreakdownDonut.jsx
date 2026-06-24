@@ -29,7 +29,7 @@ export default function CostBreakdownDonut() {
     )
 
   const sorted = [...data].sort((a, b) => b.value - a.value)
-  const total = sorted.reduce((s, d) => s + d.value, 0)
+  const total = Array.isArray(sorted) ? sorted.reduce((s, d) => s + d.value, 0) : 0
   const max = sorted[0]?.value || 1
 
   return (
