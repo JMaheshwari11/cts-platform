@@ -3,6 +3,7 @@ import { useConsolidationByCarrier } from "../../hooks/useConsolidationData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function ConsolidationByCarrier() {
   const { data, isLoading, error, refetch } = useConsolidationByCarrier()
@@ -30,6 +31,6 @@ export default function ConsolidationByCarrier() {
         itemStyle: { color: "#FBBF24" }, lineStyle: { width: 2 }, smooth: true },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">Consolidation by Carrier</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Consolidation by Carrier<InfoTooltip label="Consolidation by Carrier" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 360 }} /></div>
 }

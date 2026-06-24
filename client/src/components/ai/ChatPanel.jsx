@@ -4,7 +4,7 @@ import {
   X, Send, Sparkles, RotateCcw, Wrench, AlertCircle, Bot, User, Square,
 } from "lucide-react"
 import { useAIStore } from "../../store/useAIStore"
-import { aiSuggestedPrompts, aiReset, aiHealth, aiStream } from "../../api/ai"
+import { aiSuggestedPrompts, aiReset, aiHealth, aiStream, isAiDemoMode } from "../../api/ai"
 
 export default function ChatPanel() {
   const {
@@ -18,6 +18,8 @@ export default function ChatPanel() {
   const [provider, setProvider] = useState(null)
   const scrollRef = useRef(null)
   const inputRef = useRef(null)
+
+  const demoMode = isAiDemoMode()
 
   useEffect(() => {
     if (!open) return
@@ -97,6 +99,8 @@ export default function ChatPanel() {
     newConversation()
   }
 
+  const providerLabel = demoMode ? "Demo Mode" : (provider?.provider || "AI")
+
   return (
     <>
       {open && (
@@ -145,15 +149,31 @@ export default function ChatPanel() {
             </div>
             <div>
               <div style={{
-                fontSize: 14, fontWeight: 700, color: "#fff", letterSpacing: "-0.01em",
+                fontSize: 14, fontWeight: 700, color: "#fff",
+                letterSpacing: "-0.01em",
+                display: "flex", alignItems: "center", gap: 6,
               }}>
                 CTS Assistant
+                {demoMode && (
+                  <span style={{
+                    fontSize: 9,
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    padding: "2px 6px",
+                    borderRadius: 4,
+                    background: "linear-gradient(135deg, #FBBF24, #F59E0B)",
+                    color: "#0A0014",
+                  }}>
+                    Demo
+                  </span>
+                )}
               </div>
               <div style={{
                 fontSize: 9.5, fontWeight: 700, letterSpacing: "0.18em",
                 textTransform: "uppercase", color: "rgba(255,255,255,0.45)",
               }}>
-                Accenture S&amp;C · Powered by {provider?.provider || "AI"}
+                Accenture S&amp;C · Powered by {providerLabel}
               </div>
             </div>
           </div>
@@ -176,7 +196,7 @@ export default function ChatPanel() {
           display: "flex", flexDirection: "column", gap: 14, position: "relative",
         }}>
           {messages.length === 0 && (
-            <EmptyState suggestions={suggestions} onPick={sendMessage} />
+            <EmptyState suggestions={suggestions} onPick={sendMessage} demoMode={demoMode} />
           )}
           {messages.map((m, i) => <Bubble key={i} message={m} />)}
           {isThinking && currentStatus && messages.length > 0 && !messages[messages.length - 1].content && (
@@ -204,7 +224,9 @@ export default function ChatPanel() {
                 e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px"
               }}
               onKeyDown={handleKeyDown}
-              placeholder="Ask anything about your supply chain..."
+              placeholder={demoMode
+                ? "Try a suggested prompt..."
+                : "Ask anything about your supply chain..."}
               disabled={isThinking}
               style={{
                 flex: 1, background: "transparent", border: "none", outline: "none",
@@ -242,8 +264,11 @@ export default function ChatPanel() {
           <div style={{
             fontSize: 10, color: "rgba(255,255,255,0.35)", textAlign: "center", marginTop: 8,
           }}>
-            {provider?.provider === "ollama" && "Running locally · "}
-            Press Enter to send · Shift+Enter for new line
+            {demoMode
+              ? "Demo mode · Pre-scripted responses for showcase"
+              : (provider?.provider === "ollama" ? "Running locally · " : "")
+            }
+            {!demoMode && "Press Enter to send · Shift+Enter for new line"}
           </div>
         </div>
       </aside>
@@ -257,7 +282,7 @@ const iconBtn = {
   justifyContent: "center", transition: "background 0.15s",
 }
 
-function EmptyState({ suggestions, onPick }) {
+function EmptyState({ suggestions, onPick, demoMode }) {
   return (
     <div style={{ paddingTop: 12 }}>
       <div style={{ textAlign: "center", marginBottom: 20 }}>
@@ -274,10 +299,12 @@ function EmptyState({ suggestions, onPick }) {
           fontSize: 16, fontWeight: 700, color: "#fff", marginBottom: 4,
           letterSpacing: "-0.01em",
         }}>
-          Hi Jayant - how can I help?
+          Hi Jayant — how can I help?
         </div>
         <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)" }}>
-          I can query your data, run simulators, and explain results.
+          {demoMode
+            ? "Click any prompt below to see a pre-scripted response."
+            : "I can query your data, run simulators, and explain results."}
         </div>
       </div>
       <div style={{

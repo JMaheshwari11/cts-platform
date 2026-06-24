@@ -69,6 +69,10 @@ def top_skus(limit: int = 15, sort_by: str = "total_cost"):
 
 @router.get("/velocity-value-matrix")
 def velocity_value_matrix():
+    """2D matrix: velocity_tier x value_tier with shipment + cost stats.
+    
+    Utilization returned as PERCENTAGE.
+    """
     df = cache.df
     if "velocity_tier" not in df.columns or "value_tier" not in df.columns:
         return []
@@ -79,7 +83,9 @@ def velocity_value_matrix():
         total_cost=("total_cost", "sum"),
         avg_cost_per_kg=("cost_per_kg", "mean"),
         avg_util=("vehicle_utilization_weight", "mean"),
-    ).reset_index().round(2)
+    ).reset_index()
+    grp["avg_util"] = (grp["avg_util"] * 100).round(2)  # FIX
+    grp = grp.round(2)
     return grp.to_dict(orient="records")
 
 

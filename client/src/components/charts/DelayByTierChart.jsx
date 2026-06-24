@@ -3,6 +3,7 @@ import { useDelayByTier } from "../../hooks/useDelayData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function DelayByTierChart() {
   const { data, isLoading, error, refetch } = useDelayByTier()
@@ -30,6 +31,6 @@ export default function DelayByTierChart() {
         itemStyle: { color: "#EF4444" }, lineStyle: { width: 2 }, smooth: true },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">OTD &amp; Delay by Tier Transition</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>OTD &amp; Delay by Tier Transition<InfoTooltip label="OTD &amp; Delay by Tier Transition" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 360 }} /></div>
 }

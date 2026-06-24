@@ -1,5 +1,4 @@
-import { Truck, Award, Activity, Leaf, Network } from "lucide-react"
-import CosmicHero from "../components/shared/CosmicHero"
+import { Truck, Award, Activity, Leaf } from "lucide-react"
 import CosmicKPICard from "../components/shared/CosmicKPICard"
 import CarrierScorecard from "../components/charts/CarrierScorecard"
 import CarrierRadar from "../components/charts/CarrierRadar"
@@ -19,17 +18,10 @@ export default function CarriersPage() {
 
   return (
     <div className="page-container">
-      <CosmicHero
-        eyebrow="Accenture S&C · Service & Delivery"
-        title="Carrier Intelligence"
-        subtitle="Full carrier scorecards, multi-dimensional comparison, mode mix, and sustainability rankings"
-        stats={[
-          { icon: Truck,    label: "Active Carriers", value: formatNumber(kpis?.unique_carriers), glow: "rgba(161,0,255,0.5)" },
-          { icon: Award,    label: "Top Carrier",     value: topCarrier?.carrier_name || "—",     glow: "rgba(251,191,36,0.5)" },
-          { icon: Activity, label: "Avg OTD %",       value: avgOTD ? `${avgOTD}%` : "—",         glow: "rgba(16,185,129,0.5)" },
-          { icon: Leaf,     label: "Sustain Score",   value: avgSus ?? "—",                       glow: "rgba(20,184,166,0.5)" },
-        ]}
-      />
+      <div>
+        <h1 className="page-title">Carrier Intelligence</h1>
+        <p className="page-subtitle">Full carrier scorecards, multi-dimensional comparison, mode mix, and sustainability rankings</p>
+      </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <CosmicKPICard label="Active Carriers"    value={formatNumber(kpis?.unique_carriers)} icon={Truck}    accentClr="#A100FF" loading={kpisLoading} />

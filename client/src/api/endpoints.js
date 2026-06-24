@@ -19,6 +19,7 @@ export const fetchCarrierModeMix = () => apiClient.get("/carrier/mode-mix")
 
 // Load Type
 export const fetchLoadtypeSummary    = () => apiClient.get("/loadtype/summary")
+export const fetchFTLLTLSummary      = () => apiClient.get("/loadtype/ftl-ltl-summary")
 export const fetchLoadtypeByTier     = () => apiClient.get("/loadtype/by-tier")
 export const fetchLoadtypeByCarrier  = () => apiClient.get("/loadtype/by-carrier")
 export const fetchUtilizationDist    = () => apiClient.get("/loadtype/utilization-distribution")

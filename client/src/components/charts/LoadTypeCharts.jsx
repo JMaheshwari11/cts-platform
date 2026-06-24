@@ -3,6 +3,7 @@ import { useLoadtypeByCarrier, useUtilizationDist } from "../../hooks/useLoadTyp
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 const LOAD_COLORS = { FTL: "#A100FF", LTL: "#FBBF24" }
 
@@ -31,7 +32,7 @@ export function LoadTypeByCarrier() {
     yAxis: { type: "value", ...axis },
     series,
   }
-  return <div className="chart-card"><h3 className="chart-title">FTL vs LTL Mix per Carrier</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>FTL vs LTL Mix per Carrier<InfoTooltip label="FTL vs LTL Mix per Carrier" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 320 }} /></div>
 }
 
@@ -59,6 +60,6 @@ export function UtilizationDistribution() {
     yAxis: { type: "value", ...axis },
     series,
   }
-  return <div className="chart-card"><h3 className="chart-title">Vehicle Utilization Distribution</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Vehicle Utilization Distribution<InfoTooltip label="Vehicle Utilization Distribution" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 320 }} /></div>
 }

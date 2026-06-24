@@ -3,6 +3,7 @@ import { useUtilizationGap } from "../../hooks/useBenchmarkData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function UtilizationGapChart() {
   const { data, isLoading, error, refetch } = useUtilizationGap()
@@ -27,6 +28,6 @@ export default function UtilizationGapChart() {
         itemStyle: { color: "#10B981", borderRadius: [4,4,0,0] }, barWidth: "35%" },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">Utilization Gap by Carrier</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Utilization Gap by Carrier<InfoTooltip label="Utilization Gap by Carrier" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 360 }} /></div>
 }

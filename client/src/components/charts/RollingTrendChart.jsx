@@ -4,6 +4,7 @@ import { useRolling, useAnomalies } from "../../hooks/useTrendsData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 const METRICS = [
   { key: "total_cost",  label: "Total Cost" },
@@ -41,7 +42,7 @@ export default function RollingTrendChart() {
              axisLabel: { ...axis.axisLabel, fontSize: 10 } },
     yAxis: { type: "value", ...axis,
              axisLabel: { ...axis.axisLabel,
-               formatter: (v) => v >= 1e7 ? `${(v/1e7).toFixed(1)}Cr` : v >= 1e5 ? `${(v/1e5).toFixed(1)}L` : v >= 1e3 ? `${(v/1e3).toFixed(0)}K` : v } },
+               formatter: (v) => v >= 1e7 ? `${(v/1e6).toFixed(1)}M` : v >= 1e5 ? `${(v/1e3).toFixed(0)}K` : v >= 1e3 ? `${(v/1e3).toFixed(0)}K` : v } },
     series: [
       { name: "Daily", type: "line", data: values, smooth: false, symbol: "none",
         lineStyle: { color: "#C266FF", width: 1, opacity: 0.5 }, itemStyle: { color: "#C266FF" } },
@@ -59,7 +60,7 @@ export default function RollingTrendChart() {
     <div className="chart-card">
       <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
         <div>
-          <h3 className="chart-title mb-0">Rolling Trend &amp; Anomalies</h3>
+          <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Rolling Trend &amp; Anomalies<InfoTooltip label="Rolling Trend &amp; Anomalies" size="xs" /></h3>
           <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>
             Red = unusually high · Blue = unusually low
           </p>

@@ -1,5 +1,4 @@
 import { TrendingUp, TrendingDown, Calendar, Activity, BarChart3 } from "lucide-react"
-import CosmicHero from "../components/shared/CosmicHero"
 import CosmicKPICard from "../components/shared/CosmicKPICard"
 import RollingTrendChart from "../components/charts/RollingTrendChart"
 import SeasonalityChart from "../components/charts/SeasonalityChart"
@@ -35,17 +34,10 @@ export default function TrendsPage() {
 
   return (
     <div className="page-container">
-      <CosmicHero
-        eyebrow="Accenture S&C · Optimization Insights"
-        title="Trends &amp; Seasonality"
-        subtitle="Year-over-year deltas, monthly seasonality patterns, rolling averages, anomaly detection, and peak-season impact"
-        stats={[
-          { icon: BarChart3, label: "Volume",   value: formatNumber(data?.total_volume),       glow: "rgba(161,0,255,0.5)" },
-          { icon: Calendar,  label: "Year Cost", value: formatCurrency(data?.latest_total_cost),glow: "rgba(251,191,36,0.5)" },
-          { icon: Calendar,  label: "Years",    value: data?.years_covered ?? "—",             glow: "rgba(59,130,246,0.5)" },
-          { icon: Activity,  label: "Months",   value: data?.active_months ?? "—",             glow: "rgba(16,185,129,0.5)" },
-        ]}
-      />
+      <div>
+        <h1 className="page-title">Trends &amp; Seasonality</h1>
+        <p className="page-subtitle">Year-over-year deltas, monthly seasonality patterns, rolling averages, anomaly detection, and peak-season impact</p>
+      </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <CosmicKPICard label="Total Volume"     value={formatNumber(data?.total_volume)}      icon={BarChart3} accentClr="#A100FF" loading={isLoading} />

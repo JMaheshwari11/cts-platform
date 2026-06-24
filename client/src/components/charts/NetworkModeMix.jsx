@@ -3,6 +3,7 @@ import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
 import { Truck, Train, Plane, Layers, Route, IndianRupee, Clock, Leaf } from "lucide-react"
 import { formatNumber, formatCurrency, formatPct } from "../../utils/formatters"
+import InfoTooltip from "../shared/InfoTooltip"
 
 const MODE_META = {
   "Road":       { icon: Truck,  gradient: "from-purple-500 to-purple-700",     color: "#A100FF" },
@@ -21,7 +22,7 @@ export default function NetworkModeMix() {
     <div className="chart-card">
       <div className="flex items-center gap-2 mb-1">
         <Route className="w-5 h-5 text-accenture-purple" />
-        <h3 className="chart-title mb-0">Transport Mode Mix</h3>
+        <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Transport Mode Mix<InfoTooltip label="Transport Mode Mix" size="xs" /></h3>
       </div>
       <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
         How shipments split across Road, Rail, Air, and Multimodal
@@ -78,7 +79,7 @@ export default function NetworkModeMix() {
               <div className="space-y-1 text-[11px]">
                 <Row label="Shipments" value={formatNumber(m.shipments)} />
                 <Row label="Cost" value={formatCurrency(m.total_cost)} />
-                <Row icon={IndianRupee} label="₹/km" value={m.avg_cost_per_km?.toFixed(1)} />
+                <Row icon={IndianRupee} label="$/km" value={m.avg_cost_per_km?.toFixed(1)} />
                 <Row icon={Route} label="Avg km" value={m.avg_distance_km?.toFixed(0)} />
                 <Row icon={Clock} label="OTD" value={formatPct(m.avg_otd)} />
                 <Row icon={Leaf} label="CO₂/ship" value={`${m.avg_co2_kg?.toFixed(1)} kg`} />

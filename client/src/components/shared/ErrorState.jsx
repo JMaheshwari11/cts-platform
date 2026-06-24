@@ -1,16 +1,35 @@
-import { AlertCircle } from 'lucide-react'
+import { CloudOff, RefreshCw } from "lucide-react"
 
-export default function ErrorState({ message = 'Failed to load data', onRetry }) {
+/**
+ * ErrorState — designed error illustration with retry CTA.
+ *
+ * Used when an API call fails. Branded with red tint instead of generic gray.
+ */
+export default function ErrorState({
+  onRetry,
+  title = "Couldn\u0027t load this data",
+  message = "Something went wrong fetching this section. The server may be temporarily unavailable.",
+}) {
   return (
-    <div className="chart-card flex flex-col items-center justify-center py-12 text-center">
-      <AlertCircle className="w-10 h-10 text-danger mb-3" />
-      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{message}</p>
-      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-        Check that the backend server is running at http://localhost:8000
-      </p>
-      {onRetry && (
-        <button onClick={onRetry} className="btn-primary mt-4 text-sm">Retry</button>
-      )}
+    <div className="chart-card">
+      <div className="error-state">
+        <div className="error-illustration">
+          <CloudOff size={56} strokeWidth={1.5} className="error-illustration-icon" />
+        </div>
+        <div className="empty-title">{title}</div>
+        <div className="empty-subtitle">{message}</div>
+        {onRetry && (
+          <div className="empty-action">
+            <button
+              onClick={onRetry}
+              className="btn-secondary inline-flex items-center gap-2"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              Try again
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

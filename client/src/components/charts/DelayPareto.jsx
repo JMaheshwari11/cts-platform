@@ -3,6 +3,7 @@ import { useRootCauses } from "../../hooks/useDelayData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function DelayPareto() {
   const { data, isLoading, error, refetch } = useRootCauses()
@@ -39,6 +40,6 @@ export default function DelayPareto() {
         itemStyle: { color: "#A100FF" }, lineStyle: { width: 3 }, smooth: true, symbol: "circle", symbolSize: 7 },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">Delay Root Cause Pareto</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Delay Root Cause Pareto<InfoTooltip label="Delay Root Cause Pareto" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 360 }} /></div>
 }

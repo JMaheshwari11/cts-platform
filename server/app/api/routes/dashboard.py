@@ -40,11 +40,19 @@ def get_kpis(
 
     otd_pct = float(df["otd_flag"].mean() * 100)
     avg_delay = float(df["delay_days"].mean())
-    avg_util_weight = float(df["vehicle_utilization_weight"].mean())
-    avg_util_volume = float(df["vehicle_utilization_volume"].mean())
+
+    # ─── UTILIZATION FIX ────────────────────────────────────────
+    # Raw values are 0-1 decimals; multiply by 100 to get percentage.
+    # Effective utilization = max(weight, volume) — standard industry approach
+    # (a truck of pillows is "full" by volume even if light).
+    avg_util_weight_pct = float(df["vehicle_utilization_weight"].mean() * 100)
+    avg_util_volume_pct = float(df["vehicle_utilization_volume"].mean() * 100)
+    df_eff = df[["vehicle_utilization_weight", "vehicle_utilization_volume"]].max(axis=1)
+    avg_util_effective_pct = float(df_eff.mean() * 100)
 
     avg_cost_per_kg = float(df["cost_per_kg"].mean())
     avg_cost_per_km = float(df["cost_per_km"].mean())
+    avg_cost_per_unit = float(df["cost_per_unit"].mean())
     consolidation_rate = float(df["consolidation_flag"].mean() * 100)
 
     return round_dict({
@@ -54,10 +62,12 @@ def get_kpis(
         "total_co2_kg": total_co2,
         "otd_pct": otd_pct,
         "avg_delay_days": avg_delay,
-        "avg_utilization_weight": avg_util_weight,
-        "avg_utilization_volume": avg_util_volume,
+        "avg_utilization_weight": avg_util_weight_pct,
+        "avg_utilization_volume": avg_util_volume_pct,
+        "avg_utilization_effective": avg_util_effective_pct,
         "avg_cost_per_kg": avg_cost_per_kg,
         "avg_cost_per_km": avg_cost_per_km,
+        "avg_cost_per_unit": avg_cost_per_unit,
         "consolidation_rate_pct": consolidation_rate,
         "unique_carriers": int(df["carrier_id"].nunique()),
         "unique_products": int(df["product_id"].nunique()),
@@ -82,7 +92,7 @@ def monthly_trend():
 
 @router.get("/heatmap-mom")
 def heatmap_mom(metric: str = "total_cost"):
-    """Month × Year heatmap (e.g., for cost MoM heatmap visualization)."""
+    """Month x Year heatmap."""
     df = cache.df.copy()
     valid_metrics = ["total_cost", "shipments", "otd_pct", "avg_cost_per_kg"]
     if metric not in valid_metrics:

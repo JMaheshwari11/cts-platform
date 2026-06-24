@@ -3,6 +3,7 @@ import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
 import { Route } from "lucide-react"
 import { formatNumber, formatCurrency, formatPct } from "../../utils/formatters"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function TopTierTransitions() {
   const { data, isLoading, error, refetch } = useTierFlow()
@@ -17,7 +18,7 @@ export default function TopTierTransitions() {
     <div className="chart-card">
       <div className="flex items-center gap-2 mb-1">
         <Route className="w-5 h-5 text-accenture-purple" />
-        <h3 className="chart-title mb-0">Top Tier-to-Tier Lanes</h3>
+        <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Top Tier-to-Tier Lanes<InfoTooltip label="Top Tier-to-Tier Lanes" size="xs" /></h3>
       </div>
       <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
         Busiest transitions ranked by shipment volume — distance, cost/kg, OTD, utilization
@@ -39,7 +40,7 @@ export default function TopTierTransitions() {
                   <span className="text-[10px] text-gray-500">{t.avg_distance_km?.toFixed(0)} km avg</span>
                 </div>
                 <div className="flex items-center gap-3 text-[11px]">
-                  <span><span className="text-gray-500">₹/kg </span><b className="text-gray-900 dark:text-white">{t.avg_cost_per_kg?.toFixed(2)}</b></span>
+                  <span><span className="text-gray-500">$/kg </span><b className="text-gray-900 dark:text-white">{t.avg_cost_per_kg?.toFixed(2)}</b></span>
                   <span><span className="text-gray-500">Util </span><b className="text-gray-900 dark:text-white">{formatPct(t.avg_util)}</b></span>
                   <span><span className="text-gray-500">OTD </span><b className="text-gray-900 dark:text-white">{formatPct(t.avg_otd)}</b></span>
                   <span className="font-bold text-accenture-purple">{formatNumber(t.shipments)}</span>

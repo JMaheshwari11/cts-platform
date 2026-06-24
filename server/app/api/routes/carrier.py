@@ -1,4 +1,4 @@
-"""Carrier intelligence — performance, cost, sustainability."""
+"""Carrier intelligence - performance, cost, sustainability."""
 
 from fastapi import APIRouter
 from app.data.cache import cache
@@ -20,7 +20,9 @@ def carrier_performance():
         avg_util_weight=("vehicle_utilization_weight", "mean"),
         avg_co2_kg=("co2_emission_kg", "mean"),
         avg_sustainability=("sustainability_score", "mean"),
-    ).reset_index().round(2)
+    ).reset_index()
+    grp["avg_util_weight"] = (grp["avg_util_weight"] * 100).round(2)  # FIX
+    grp = grp.round(2)
     grp = grp.sort_values("shipments", ascending=False)
     return grp.to_dict(orient="records")
 
@@ -35,7 +37,9 @@ def carrier_comparison():
         utilization=("vehicle_utilization_weight", "mean"),
         sustainability=("sustainability_score", "mean"),
         underperformance_rate=("carrier_underperformance_flag", "mean"),
-    ).reset_index().round(2)
+    ).reset_index()
+    grp["utilization"] = (grp["utilization"] * 100).round(2)  # FIX
+    grp = grp.round(2)
     return grp.to_dict(orient="records")
 
 

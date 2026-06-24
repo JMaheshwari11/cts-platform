@@ -3,6 +3,7 @@ import { useCostByMode } from "../../hooks/useCostData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function CostByModeChart() {
   const { data, isLoading, error, refetch } = useCostByMode()
@@ -18,8 +19,8 @@ export default function CostByModeChart() {
     xAxis: { type: "category", data: data.map(d => d.transport_mode), ...axis },
     yAxis: [
       { type: "value", name: "Total Cost", ...axis,
-        axisLabel: { ...axis.axisLabel, formatter: (v) => v >= 1e7 ? `${(v/1e7).toFixed(1)}Cr` : v >= 1e5 ? `${(v/1e5).toFixed(1)}L` : v } },
-      { type: "value", name: "₹/Km", position: "right", ...axis, splitLine: { show: false } },
+        axisLabel: { ...axis.axisLabel, formatter: (v) => v >= 1e7 ? `${(v/1e6).toFixed(1)}M` : v >= 1e5 ? `${(v/1e3).toFixed(0)}K` : v } },
+      { type: "value", name: "$/Km", position: "right", ...axis, splitLine: { show: false } },
     ],
     series: [
       { name: "Total Cost", type: "bar", yAxisIndex: 0,
@@ -29,6 +30,6 @@ export default function CostByModeChart() {
         smooth: true, itemStyle: { color: "#EF4444" }, lineStyle: { width: 3 } },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">Cost by Transport Mode</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Cost by Transport Mode<InfoTooltip label="Cost by Transport Mode" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 320 }} /></div>
 }

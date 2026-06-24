@@ -26,6 +26,10 @@ def trends_kpis():
             return 0.0
         return float((curr - past) / past * 100)
 
+    # FIX: util in source is 0-1, multiply by 100 before computing percentage-points delta
+    latest_util_pct = float(latest_df["vehicle_utilization_weight"].mean() * 100)
+    prev_util_pct = float(prev_df["vehicle_utilization_weight"].mean() * 100)
+
     return {
         "total_volume": int(len(df)),
         "years_covered": len(years),
@@ -34,7 +38,7 @@ def trends_kpis():
         "yoy_cost_pct": round(yoy_pct(latest_df["total_cost"].sum(), prev_df["total_cost"].sum()), 2),
         "yoy_shipments_pct": round(yoy_pct(len(latest_df), len(prev_df)), 2),
         "yoy_otd_pp": round(float(latest_df["otd_flag"].mean() * 100 - prev_df["otd_flag"].mean() * 100), 2),
-        "yoy_util_pp": round(float(latest_df["vehicle_utilization_weight"].mean() - prev_df["vehicle_utilization_weight"].mean()), 2),
+        "yoy_util_pp": round(latest_util_pct - prev_util_pct, 2),
         "latest_total_cost": round(float(latest_df["total_cost"].sum()), 2),
         "latest_shipments": int(len(latest_df)),
     }
@@ -61,11 +65,7 @@ def rolling_trend(window: int = 7, metric: str = "total_cost"):
     rolling = daily.rolling(window=window, min_periods=1).mean()
 
     return [
-        {
-            "date": str(d),
-            "value": round(float(v), 2),
-            "rolling": round(float(rolling.loc[d]), 2),
-        }
+        {"date": str(d), "value": round(float(v), 2), "rolling": round(float(rolling.loc[d]), 2)}
         for d, v in daily.items()
     ]
 
@@ -89,17 +89,14 @@ def anomalies(metric: str = "total_cost", z_threshold: float = 2.5):
     if std == 0 or pd.isna(std):
         return []
 
-    anomalies_list = []
+    out = []
     for d, v in daily.items():
         z = (v - mean) / std
         if abs(z) >= z_threshold:
-            anomalies_list.append({
-                "date": str(d),
-                "value": round(float(v), 2),
-                "z_score": round(float(z), 2),
-                "direction": "above" if z > 0 else "below",
-            })
-    return anomalies_list
+            out.append({"date": str(d), "value": round(float(v), 2),
+                        "z_score": round(float(z), 2),
+                        "direction": "above" if z > 0 else "below"})
+    return out
 
 
 @router.get("/seasonality")
@@ -113,7 +110,6 @@ def seasonality():
         avg_otd=("otd_flag", "mean"),
     ).reset_index()
 
-    # Normalize to per-year averages
     n_years = df["ship_date"].dt.year.nunique() or 1
     grp["avg_shipments"] = (grp["avg_shipments"] / n_years).round(0).astype(int)
     grp["avg_cost"] = (grp["avg_cost"] / n_years).round(2)
@@ -121,13 +117,10 @@ def seasonality():
 
     MONTH_NAMES = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
     return [
-        {
-            "month": int(row["month"]),
-            "month_name": MONTH_NAMES[int(row["month"]) - 1],
-            "avg_shipments": int(row["avg_shipments"]),
-            "avg_cost": float(row["avg_cost"]),
-            "avg_otd": float(row["avg_otd"]),
-        }
+        {"month": int(row["month"]), "month_name": MONTH_NAMES[int(row["month"]) - 1],
+         "avg_shipments": int(row["avg_shipments"]),
+         "avg_cost": float(row["avg_cost"]),
+         "avg_otd": float(row["avg_otd"])}
         for _, row in grp.iterrows()
     ]
 

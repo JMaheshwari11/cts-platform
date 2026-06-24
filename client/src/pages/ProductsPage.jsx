@@ -2,7 +2,6 @@ import {
   Package, Tag, Boxes, Snowflake, AlertTriangle,
   RotateCw, ShieldAlert, Clock,
 } from "lucide-react"
-import CosmicHero from "../components/shared/CosmicHero"
 import CosmicKPICard from "../components/shared/CosmicKPICard"
 import CategoryMixDonut from "../components/charts/CategoryMixDonut"
 import CategoryLeadTimeChart from "../components/charts/CategoryLeadTimeChart"
@@ -18,17 +17,10 @@ export default function ProductsPage() {
 
   return (
     <div className="page-container">
-      <CosmicHero
-        eyebrow="Accenture S&C · Network & Flow"
-        title="Products"
-        subtitle="Category mix, velocity-value matrix, cold-chain and hazardous handling, returns, and SKU drill-down"
-        stats={[
-          { icon: Package, label: "Products",  value: formatNumber(data?.unique_products), glow: "rgba(161,0,255,0.5)" },
-          { icon: Boxes,   label: "SKUs",      value: formatNumber(data?.unique_skus),     glow: "rgba(59,130,246,0.5)" },
-          { icon: Tag,     label: "Categories",value: formatNumber(data?.categories),      glow: "rgba(139,92,246,0.5)" },
-          { icon: Clock,   label: "Shelf Life",value: data?.avg_shelf_life_days ? `${data.avg_shelf_life_days.toFixed(0)} days` : "—", glow: "rgba(245,158,11,0.5)" },
-        ]}
-      />
+      <div>
+        <h1 className="page-title">Products</h1>
+        <p className="page-subtitle">Category mix, velocity-value matrix, cold-chain and hazardous handling, returns, and SKU drill-down</p>
+      </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <CosmicKPICard label="Unique Products" value={formatNumber(data?.unique_products)} icon={Package} accentClr="#A100FF" loading={isLoading} />

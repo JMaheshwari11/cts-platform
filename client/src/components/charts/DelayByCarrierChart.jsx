@@ -3,6 +3,7 @@ import { useDelayByCarrier } from "../../hooks/useDelayData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function DelayByCarrierChart() {
   const { data, isLoading, error, refetch } = useDelayByCarrier()
@@ -29,6 +30,6 @@ export default function DelayByCarrierChart() {
         itemStyle: { color: "#A100FF" }, lineStyle: { width: 2 }, smooth: true },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">Delay Performance by Carrier</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Delay Performance by Carrier<InfoTooltip label="Delay Performance by Carrier" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 360 }} /></div>
 }

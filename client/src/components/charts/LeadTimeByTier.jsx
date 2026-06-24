@@ -3,6 +3,7 @@ import { useLeadtimeByTier } from "../../hooks/usePOData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function LeadTimeByTier() {
   const { data, isLoading, error, refetch } = useLeadtimeByTier()
@@ -27,6 +28,6 @@ export default function LeadTimeByTier() {
         data: top.map(d => d.avg_ship_to_delivery), itemStyle: { color: "#3B82F6" } },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">Lead Time Decomposition by Tier</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Lead Time Decomposition by Tier<InfoTooltip label="Lead Time Decomposition by Tier" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 360 }} /></div>
 }

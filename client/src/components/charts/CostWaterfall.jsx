@@ -3,6 +3,7 @@ import { useCostBreakdown } from "../../hooks/useCostData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function CostWaterfall() {
   const { data, isLoading, error, refetch } = useCostBreakdown()
@@ -21,7 +22,7 @@ export default function CostWaterfall() {
       formatter: (params) => {
         const p = params[0]
         const pct = (p.value / total * 100).toFixed(1)
-        return `${p.name}<br/><b>₹${p.value.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</b><br/>${pct}% of total`
+        return `${p.name}<br/><b>$${p.value.toLocaleString("en-IN", { maximumFractionDigits: 0 })}</b><br/>${pct}% of total`
       },
     },
     grid: { left: "3%", right: "4%", bottom: "8%", top: "5%", containLabel: true },
@@ -31,7 +32,7 @@ export default function CostWaterfall() {
     },
     yAxis: {
       type: "value", ...axis,
-      axisLabel: { ...axis.axisLabel, formatter: (v) => v >= 1e7 ? `${(v/1e7).toFixed(1)}Cr` : v >= 1e5 ? `${(v/1e5).toFixed(1)}L` : v },
+      axisLabel: { ...axis.axisLabel, formatter: (v) => v >= 1e7 ? `${(v/1e6).toFixed(1)}M` : v >= 1e5 ? `${(v/1e3).toFixed(0)}K` : v },
     },
     series: [{
       type: "bar",
@@ -43,7 +44,7 @@ export default function CostWaterfall() {
   }
   return (
     <div className="chart-card">
-      <h3 className="chart-title">Cost Components (Ranked)</h3>
+      <h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Cost Components (Ranked)<InfoTooltip label="Cost Components (Ranked)" size="xs" /></h3>
       <ReactECharts option={option} style={{ height: 340 }} />
     </div>
   )

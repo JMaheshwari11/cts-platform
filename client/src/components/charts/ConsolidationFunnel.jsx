@@ -3,6 +3,7 @@ import { useConsolidationFunnel } from "../../hooks/useConsolidationData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function ConsolidationFunnel() {
   const { data, isLoading, error, refetch } = useConsolidationFunnel()
@@ -29,6 +30,6 @@ export default function ConsolidationFunnel() {
       })),
     }],
   }
-  return <div className="chart-card"><h3 className="chart-title">Consolidation Opportunity Funnel</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Consolidation Opportunity Funnel<InfoTooltip label="Consolidation Opportunity Funnel" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 360 }} /></div>
 }

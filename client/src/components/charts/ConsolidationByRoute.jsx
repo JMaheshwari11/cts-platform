@@ -3,6 +3,7 @@ import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
 import { MapPin } from "lucide-react"
 import { formatNumber, formatPct, formatCurrency } from "../../utils/formatters"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function ConsolidationByRoute() {
   const { data, isLoading, error, refetch } = useConsolidationByRoute()
@@ -14,7 +15,7 @@ export default function ConsolidationByRoute() {
     <div className="chart-card">
       <div className="flex items-center gap-2 mb-4">
         <MapPin className="w-5 h-5 text-accenture-purple" />
-        <h3 className="chart-title mb-0">Top Routes by Consolidation Opportunity</h3>
+        <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Top Routes by Consolidation Opportunity<InfoTooltip label="Top Routes by Consolidation Opportunity" size="xs" /></h3>
       </div>
       <div className="overflow-x-auto">
         <table className="data-table">

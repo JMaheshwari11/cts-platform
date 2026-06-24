@@ -1,0 +1,257 @@
+/* ════════════════════════════════════════════════════════════════════
+   Phase 4: Final Polish
+   Typography, focus, transitions, textures, consistency
+   ════════════════════════════════════════════════════════════════════ */
+
+/* ──────────────────────────────────────────────────────────────
+   Numeric typography — KPI values feel weighty + premium
+   ────────────────────────────────────────────────────────────── */
+.kpi-value,
+.num,
+.tabular {
+  font-feature-settings: "tnum", "ss01", "cv11";
+  font-variant-numeric: tabular-nums slashed-zero;
+}
+
+/* Larger KPI values: slightly tighter letter-spacing for confidence */
+.kpi-value {
+  font-size: clamp(20px, 2.4vw, 28px) !important;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   FOCUS STATES — keyboard navigation gets the same care
+   ────────────────────────────────────────────────────────────── */
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-xs);
+  transition: outline-offset var(--duration-instant) var(--ease-default);
+}
+
+/* Don't show focus ring on mouse click (only keyboard) */
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Card focus (when KPI card is focused via keyboard) */
+.kpi-card:focus-within,
+.chart-card:focus-within {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-2), 0 0 0 3px var(--accent-soft);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   PAGE TRANSITIONS — confident motion between tabs
+   ────────────────────────────────────────────────────────────── */
+.app-main > main > * {
+  animation: pageSlideIn var(--duration-confident) var(--ease-confident);
+}
+
+@keyframes pageSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   QUIET TEXTURE — subtle noise on dark backgrounds
+   ────────────────────────────────────────────────────────────── */
+.dark .app-main {
+  position: relative;
+}
+
+.dark .app-main::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.025;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(255,255,255,0.4) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+.dark .app-main > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   CARD CONTENT — improved internal rhythm
+   ────────────────────────────────────────────────────────────── */
+.chart-card > h3.chart-title:first-child,
+.chart-card > div:first-child:has(h3.chart-title) {
+  margin-bottom: var(--space-4);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   LINKS — subtle but visible hover
+   ────────────────────────────────────────────────────────────── */
+a:not(.nav-item):not(.btn-primary):not(.btn-secondary) {
+  color: var(--accent);
+  text-decoration: none;
+  transition: color var(--duration-instant) var(--ease-default);
+}
+
+a:not(.nav-item):not(.btn-primary):not(.btn-secondary):hover {
+  color: var(--accent-light);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   BUTTONS — final polish for hover & active states
+   ────────────────────────────────────────────────────────────── */
+.btn-primary,
+.btn-secondary {
+  position: relative;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+}
+
+.btn-primary:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+.btn-secondary:active {
+  transform: translateY(0px) scale(0.98);
+}
+
+/* Disabled state */
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: var(--shadow-1) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   FORM CONTROLS — refined selects, inputs
+   ────────────────────────────────────────────────────────────── */
+select.control,
+input.control,
+textarea.control {
+  appearance: none;
+  -webkit-appearance: none;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+/* Custom select arrow */
+select.control {
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23A100FF'><path d='M4.427 6.427a.6.6 0 01.848 0L8 9.152l2.725-2.725a.6.6 0 01.848.848l-3.149 3.15a.6.6 0 01-.848 0L4.427 7.275a.6.6 0 010-.848z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right var(--space-2) center;
+  background-size: 16px 16px;
+  padding-right: var(--space-7);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   SCROLL — when content scrolls inside a card
+   ────────────────────────────────────────────────────────────── */
+.chart-card .overflow-x-auto,
+.chart-card .overflow-y-auto {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   TABLE — final polish (consistent across pages)
+   ────────────────────────────────────────────────────────────── */
+.data-table th {
+  white-space: nowrap;
+  user-select: none;
+}
+
+.data-table tbody td.num,
+.data-table tbody td[class*="text-right"] {
+  font-feature-settings: "tnum", "ss01";
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tbody tr {
+  transition: background var(--duration-instant) var(--ease-default);
+}
+
+/* ──────────────────────────────────────────────────────────────
+   SECTION HEADERS — page header spacing rhythm
+   ────────────────────────────────────────────────────────────── */
+.page-container > div:first-child:has(.page-title) {
+  margin-bottom: var(--space-2);
+}
+
+/* Default subtle padding between grids and other sections */
+.page-container .grid + .grid {
+  margin-top: 0;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   NAV ITEMS — sidebar refinements
+   ────────────────────────────────────────────────────────────── */
+.nav-item {
+  position: relative;
+  font-weight: 500;
+  letter-spacing: -0.005em;
+  transition:
+    background var(--duration-instant) var(--ease-default),
+    color var(--duration-instant) var(--ease-default);
+}
+
+.nav-item-active {
+  font-weight: 600;
+}
+
+/* ──────────────────────────────────────────────────────────────
+   PRINT — clean printable view
+   ────────────────────────────────────────────────────────────── */
+@media print {
+  .app-header,
+  .app-subnav,
+  .app-filterbar,
+  aside {
+    display: none !important;
+  }
+  .app-main {
+    background: white !important;
+  }
+  .chart-card,
+  .kpi-card {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    page-break-inside: avoid;
+  }
+}
+
+/* ──────────────────────────────────────────────────────────────
+   REDUCED MOTION — respect user preference
+   ────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

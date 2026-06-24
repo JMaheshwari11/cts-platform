@@ -3,14 +3,21 @@ from app.data.cache import cache
 
 
 def get_kpis() -> dict:
-    """Return current top-line KPIs across all shipments."""
-    df = cache.df
+    """Return current top-line KPIs across all shipments.
+    
+    Utilization fields are percentages (0-100), not decimals.
+    """
+    df = cache.df.copy()
+    df["_eff_util"] = df[["vehicle_utilization_weight", "vehicle_utilization_volume"]].max(axis=1)
     return {
         "total_shipments": int(len(df)),
         "total_cost_inr": round(float(df["total_cost"].sum()), 2),
         "otd_pct": round(float(df["otd_flag"].mean() * 100), 2),
         "avg_cost_per_kg": round(float(df["cost_per_kg"].mean()), 2),
         "avg_delay_days": round(float(df["delay_days"].mean()), 2),
+        "avg_util_weight_pct": round(float(df["vehicle_utilization_weight"].mean() * 100), 2),
+        "avg_util_volume_pct": round(float(df["vehicle_utilization_volume"].mean() * 100), 2),
+        "avg_util_effective_pct": round(float(df["_eff_util"].mean() * 100), 2),
         "consolidation_rate_pct": round(float(df["consolidation_flag"].mean() * 100), 2),
         "unique_carriers": int(df["carrier_id"].nunique()),
         "unique_lanes": int(df["lane_id"].nunique()) if "lane_id" in df.columns else 0,
@@ -41,17 +48,16 @@ def get_top_corridors(limit: int = 5) -> list:
     ]
 
 
-# ─── Tool schemas (JSON Schema-style descriptions for the LLM) ───
 KPI_TOOLS = [
     {
         "name": "get_kpis",
-        "description": "Get current top-line KPIs: total shipments, cost, OTD%, avg cost/kg, delay, consolidation rate, carriers, lanes, CO2.",
+        "description": "Get current top-line KPIs: shipments, cost, OTD%, avg cost/kg, delay, util% (weight/volume/effective), consolidation rate, carriers, lanes, CO2. All percentages are 0-100.",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "fn": get_kpis,
     },
     {
         "name": "get_top_corridors",
-        "description": "Get top N busiest origin-destination corridors by shipment volume with cost and OTD%.",
+        "description": "Get top N busiest origin-destination corridors with cost and OTD%.",
         "parameters": {
             "type": "object",
             "properties": {

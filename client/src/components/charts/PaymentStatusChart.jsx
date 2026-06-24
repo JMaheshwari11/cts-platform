@@ -3,6 +3,7 @@ import { usePaymentStatus } from "../../hooks/usePOData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 const STATUS_COLORS = { Paid: "#10B981", Pending: "#FBBF24", Partial: "#3B82F6", Overdue: "#EF4444" }
 
@@ -28,6 +29,6 @@ export default function PaymentStatusChart() {
       })),
     }],
   }
-  return <div className="chart-card"><h3 className="chart-title">Payment Status Distribution</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Payment Status Distribution<InfoTooltip label="Payment Status Distribution" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 320 }} /></div>
 }

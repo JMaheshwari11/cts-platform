@@ -3,6 +3,7 @@ import { useLoadtypeByTier } from "../../hooks/useLoadTypeData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function LoadTypeByTierChart() {
   const { data, isLoading, error, refetch } = useLoadtypeByTier()
@@ -34,6 +35,6 @@ export default function LoadTypeByTierChart() {
       { name: "LTL", type: "bar", data: ltl, itemStyle: { color: "#FBBF24", borderRadius: [4,4,0,0] } },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">FTL vs LTL by Tier Transition</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>FTL vs LTL by Tier Transition<InfoTooltip label="FTL vs LTL by Tier Transition" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 360 }} /></div>
 }

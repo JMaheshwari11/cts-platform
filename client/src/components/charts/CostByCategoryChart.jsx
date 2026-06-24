@@ -3,6 +3,7 @@ import { useCostByCategory } from "../../hooks/useCostData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function CostByCategoryChart() {
   const { data, isLoading, error, refetch } = useCostByCategory()
@@ -17,7 +18,7 @@ export default function CostByCategoryChart() {
     grid: { left: "20%", right: "8%", bottom: "5%", top: "5%" },
     xAxis: {
       type: "value", ...axis,
-      axisLabel: { ...axis.axisLabel, formatter: (v) => v >= 1e7 ? `${(v/1e7).toFixed(1)}Cr` : v >= 1e5 ? `${(v/1e5).toFixed(1)}L` : v },
+      axisLabel: { ...axis.axisLabel, formatter: (v) => v >= 1e7 ? `${(v/1e6).toFixed(1)}M` : v >= 1e5 ? `${(v/1e3).toFixed(0)}K` : v },
     },
     yAxis: { type: "category", data: data.map(d => d.category).reverse(), ...axis,
              axisLabel: { ...axis.axisLabel, color: t.text, fontWeight: 500 } },
@@ -32,13 +33,13 @@ export default function CostByCategoryChart() {
       barWidth: "60%",
       label: {
         show: true, position: "right", color: t.text, fontFamily: "Inter", fontSize: 11, fontWeight: 600,
-        formatter: (p) => p.value >= 1e7 ? `₹${(p.value/1e7).toFixed(1)}Cr` : `₹${(p.value/1e5).toFixed(1)}L`,
+        formatter: (p) => p.value >= 1e7 ? `$${(p.value/1e6).toFixed(1)}M` : `$${(p.value/1e3).toFixed(0)}K`,
       },
     }],
   }
   return (
     <div className="chart-card">
-      <h3 className="chart-title">Cost by Product Category</h3>
+      <h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Cost by Product Category<InfoTooltip label="Cost by Product Category" size="xs" /></h3>
       <ReactECharts option={option} style={{ height: 340 }} />
     </div>
   )

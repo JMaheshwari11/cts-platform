@@ -3,6 +3,7 @@ import { useStateHeatmap } from "../../hooks/useNetworkData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function StateHeatmapChart() {
   const { data, isLoading, error, refetch } = useStateHeatmap()
@@ -25,6 +26,6 @@ export default function StateHeatmapChart() {
         colorStops: [{ offset: 0, color: "#A100FF" }, { offset: 1, color: "#C266FF" }] },
         borderRadius: [0,6,6,0] } }],
   }
-  return <div className="chart-card"><h3 className="chart-title">Top Destination States by Volume</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Top Destination States by Volume<InfoTooltip label="Top Destination States by Volume" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 480 }} /></div>
 }

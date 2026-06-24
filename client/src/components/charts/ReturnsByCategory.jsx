@@ -3,6 +3,7 @@ import { useReturnsByCategory } from "../../hooks/useProductsData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function ReturnsByCategory() {
   const { data, isLoading, error, refetch } = useReturnsByCategory()
@@ -32,6 +33,6 @@ export default function ReturnsByCategory() {
         itemStyle: { color: "#F59E0B", borderRadius: [4,4,0,0] }, barWidth: "30%" },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">Returns &amp; Damage by Category</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Returns &amp; Damage by Category<InfoTooltip label="Returns &amp; Damage by Category" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 320 }} /></div>
 }

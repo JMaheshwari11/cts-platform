@@ -6,6 +6,7 @@ import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
 
 const CACHE_KEY = "cts_india_geojson_v1"
+const USD_RATE = 83 // 1 USD = 83 INR
 
 const MAP_URLS = [
   "https://gist.githubusercontent.com/jbrobst/56c13bbbf9d97d187fea01ca62ea5112/raw/e388c4cae20aa53cb5090210a42ebb9b765c0a36/india_states.geojson",
@@ -19,6 +20,21 @@ const NAME_FIX = {
   "Uttaranchal": "Uttarakhand", "Chattisgarh": "Chhattisgarh", "Chhatisgarh": "Chhattisgarh",
 }
 const normalize = (s) => NAME_FIX[s] || s
+
+// USD currency formatter
+const formatUsdCost = (inrValue) => {
+  if (inrValue == null || isNaN(inrValue)) return "—"
+  const usd = inrValue / USD_RATE
+  if (usd >= 1e9) return `$${(usd / 1e9).toFixed(2)}B`
+  if (usd >= 1e6) return `$${(usd / 1e6).toFixed(2)}M`
+  if (usd >= 1e3) return `$${(usd / 1e3).toFixed(0)}K`
+  return `$${usd.toFixed(0)}`
+}
+
+const formatUsdPerKg = (inrPerKg) => {
+  if (inrPerKg == null || isNaN(inrPerKg)) return "—"
+  return `$${(inrPerKg / USD_RATE).toFixed(2)}`
+}
 
 let mapRegistered = false
 
@@ -121,8 +137,8 @@ export default function IndiaMap() {
             const cpkg = p.data?.avg_cost_per_kg || 0
             return `<b style="color:#A100FF">${p.name}</b><br/>` +
                    `Shipments: <b>${v.toLocaleString()}</b><br/>` +
-                   `Cost: <b>Rs${(cost/1e7).toFixed(2)}Cr</b><br/>` +
-                   `Rs/kg: <b>${cpkg.toFixed(2)}</b>`
+                   `Cost: <b>${formatUsdCost(cost)}</b><br/>` +
+                   `$/kg: <b>${formatUsdPerKg(cpkg)}</b>`
           }
           if (p.seriesType === "effectScatter") {
             return `<b style="color:#FBBF24">${p.name}</b><br/>Volume: ${p.value[2]?.toLocaleString() || "-"}`
@@ -130,9 +146,9 @@ export default function IndiaMap() {
           if (p.seriesType === "lines") {
             const r = p.data._meta
             if (!r) return p.name
-            return `<b style="color:#A100FF">${r.origin} -> ${r.destination}</b><br/>` +
+            return `<b style="color:#A100FF">${r.origin} → ${r.destination}</b><br/>` +
                    `Shipments: <b>${r.shipments.toLocaleString()}</b><br/>` +
-                   `Cost: <b>Rs${(r.total_cost/1e7).toFixed(2)}Cr</b><br/>` +
+                   `Cost: <b>${formatUsdCost(r.total_cost)}</b><br/>` +
                    `Distance: ${r.avg_distance_km.toFixed(0)} km`
           }
           return p.name

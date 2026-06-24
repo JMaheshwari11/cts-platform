@@ -3,6 +3,7 @@ import { useCostByTier } from "../../hooks/useCostData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function CostByTierChart() {
   const { data, isLoading, error, refetch } = useCostByTier()
@@ -23,8 +24,8 @@ export default function CostByTierChart() {
              axisLabel: { ...axis.axisLabel, rotate: 45, fontSize: 10 } },
     yAxis: [
       { type: "value", name: "Total Cost", ...axis,
-        axisLabel: { ...axis.axisLabel, formatter: (v) => v >= 1e7 ? `${(v/1e7).toFixed(1)}Cr` : v >= 1e5 ? `${(v/1e5).toFixed(1)}L` : v } },
-      { type: "value", name: "₹/Kg", position: "right", ...axis, splitLine: { show: false } },
+        axisLabel: { ...axis.axisLabel, formatter: (v) => v >= 1e7 ? `${(v/1e6).toFixed(1)}M` : v >= 1e5 ? `${(v/1e3).toFixed(0)}K` : v } },
+      { type: "value", name: "$/Kg", position: "right", ...axis, splitLine: { show: false } },
     ],
     series: [
       { name: "Total Cost", type: "bar", yAxisIndex: 0, data: top.map(t => t.cost),
@@ -33,6 +34,6 @@ export default function CostByTierChart() {
         smooth: true, itemStyle: { color: "#FBBF24" }, lineStyle: { width: 2 } },
     ],
   }
-  return <div className="chart-card"><h3 className="chart-title">Top Tier Transitions by Cost</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Top Tier Transitions by Cost<InfoTooltip label="Top Tier Transitions by Cost" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 380 }} /></div>
 }

@@ -22,11 +22,12 @@ def auto_insights():
             if not by_lane.empty:
                 top = by_lane.iloc[0]
                 est_saving = float(top["total_cost"]) * 0.25
+                util_pct = float(top["avg_util"]) * 100   # FIX: convert to pct
                 insights.append({
                     "type": "opportunity", "severity": "high",
                     "title": "Top Consolidation Opportunity",
                     "headline": f"{top['origin_city']} -> {top['destination_city']}",
-                    "description": f"{int(top['shipments'])} LTL shipments with only {top['avg_util']:.0f}% avg utilization.",
+                    "description": f"{int(top['shipments'])} LTL shipments with only {util_pct:.0f}% avg utilization.",
                     "value": f"~Rs{est_saving/1e5:.1f}L estimated savings if consolidated to FTL",
                     "action": "Run Consolidation Simulator", "action_path": "/simulator",
                 })
@@ -89,22 +90,24 @@ def kpi_sparkline(metric: str = "total_cost"):
     df = cache.df.copy()
     df["ym"] = df["ship_date"].dt.to_period("M").astype(str)
     grp = df.groupby("ym")
-    if metric == "shipments":         series = grp.size()
-    elif metric == "total_cost":      series = grp["total_cost"].sum()
-    elif metric == "otd_pct":         series = grp["otd_flag"].mean() * 100
-    elif metric == "cost_per_kg":     series = grp["cost_per_kg"].mean()
-    elif metric == "utilization":     series = grp["vehicle_utilization_weight"].mean()
-    elif metric == "consolidation_rate": series = grp["consolidation_flag"].mean() * 100
-    elif metric == "delay_days":      series = grp["delay_days"].mean()
-    elif metric == "co2_kg":          series = grp["co2_emission_kg"].sum()
-    else:                             series = grp["total_cost"].sum()
+    if metric == "shipments":           series = grp.size()
+    elif metric == "total_cost":        series = grp["total_cost"].sum()
+    elif metric == "otd_pct":           series = grp["otd_flag"].mean() * 100
+    elif metric == "cost_per_kg":       series = grp["cost_per_kg"].mean()
+    elif metric == "utilization":       series = grp["vehicle_utilization_weight"].mean() * 100  # FIX
+    elif metric == "consolidation_rate":series = grp["consolidation_flag"].mean() * 100
+    elif metric == "delay_days":        series = grp["delay_days"].mean()
+    elif metric == "co2_kg":            series = grp["co2_emission_kg"].sum()
+    else:                               series = grp["total_cost"].sum()
     series = series.sort_index().tail(6)
     return [{"ym": k, "value": round(float(v), 2)} for k, v in series.items()]
 
 
 @router.get("/tier-flow")
 def tier_flow():
-    """Per-tier totals + tier-to-tier transitions WITH distance and cost-per-kg."""
+    """Per-tier totals + tier-to-tier transitions WITH distance and cost-per-kg.
+    Utilization returned as PERCENTAGE.
+    """
     df = cache.df
     TIER_ORDER = ["T2", "T1", "MF", "NH", "RD", "LD", "DT", "RT"]
 
@@ -124,7 +127,7 @@ def tier_flow():
             "to": str(row["to_tier"]),
             "shipments": int(row["shipments"]),
             "total_cost": round(float(row["total_cost"]), 2),
-            "avg_util": round(float(row["avg_util"]), 1),
+            "avg_util": round(float(row["avg_util"] * 100), 1),  # FIX: * 100
             "avg_otd": round(float(row["avg_otd"] * 100), 1),
             "avg_distance_km": round(float(row["avg_distance_km"]), 1),
             "avg_cost_per_kg": round(float(row["avg_cost_per_kg"]), 2),
@@ -137,7 +140,7 @@ def tier_flow():
             "tier": t,
             "shipments_out": int(len(from_df)),
             "total_cost_out": round(float(from_df["total_cost"].sum()), 2),
-            "avg_util": round(float(from_df["vehicle_utilization_weight"].mean()), 1) if not from_df.empty else 0,
+            "avg_util": round(float(from_df["vehicle_utilization_weight"].mean() * 100), 1) if not from_df.empty else 0,  # FIX: * 100
         }
 
     return {
@@ -147,7 +150,7 @@ def tier_flow():
             "T2": "Tier 2 Supplier", "T1": "Tier 1 Supplier",
             "MF": "Manufacturing", "NH": "National Hub",
             "RD": "Regional DC", "LD": "Local DC",
-            "DT": "Distributor", "RT": "Retailer",
+            "DT": "Distributor", "RT": "Customer",
         },
     }
 
@@ -168,6 +171,7 @@ def streamwise():
         avg_delay_days=("delay_days", "mean"),
     ).reset_index()
     grp["avg_otd"] = (grp["avg_otd"] * 100).round(2)
+    grp["avg_util"] = (grp["avg_util"] * 100).round(2)  # FIX
     grp["share_pct"] = (grp["shipments"] / grp["shipments"].sum() * 100).round(2)
     grp = grp.round(2)
     grp = grp.sort_values("shipments", ascending=False)

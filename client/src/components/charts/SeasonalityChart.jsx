@@ -3,6 +3,7 @@ import { useSeasonality } from "../../hooks/useTrendsData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function SeasonalityChart() {
   const { data, isLoading, error, refetch } = useSeasonality()
@@ -29,7 +30,7 @@ export default function SeasonalityChart() {
     ],
   }
   return <div className="chart-card">
-    <div className="mb-2"><h3 className="chart-title mb-0">Seasonality Pattern</h3>
+    <div className="mb-2"><h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Seasonality Pattern<InfoTooltip label="Seasonality Pattern" size="xs" /></h3>
     <p className="text-xs mt-0.5" style={{ color: "var(--text-muted)" }}>Average monthly pattern across all years</p></div>
     <ReactECharts option={option} style={{ height: 320 }} />
   </div>

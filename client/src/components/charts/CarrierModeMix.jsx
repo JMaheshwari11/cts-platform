@@ -3,6 +3,7 @@ import { useCarrierModeMix } from "../../hooks/useCarrierData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 const MODE_COLORS = { Road: "#A100FF", Rail: "#10B981", Air: "#0EA5E9", Multimodal: "#F59E0B" }
 
@@ -33,6 +34,6 @@ export default function CarrierModeMix() {
     yAxis: { type: "value", ...axis },
     series,
   }
-  return <div className="chart-card"><h3 className="chart-title">Mode Mix per Carrier</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Mode Mix per Carrier<InfoTooltip label="Mode Mix per Carrier" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 340 }} /></div>
 }

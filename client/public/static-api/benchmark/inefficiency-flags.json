@@ -1,0 +1,1 @@
+{"total": 36000, "inefficient": 11514, "inefficiency_rate_pct": 31.98, "avg_cost_inefficient": 156693.4, "avg_cost_efficient": 53003.06, "benchmark_cost": 53003.06, "avg_overage_per_shipment": 103690.34, "total_leak_inr": 1193890541.76, "overage_pct": 195.63, "avg_benchmark_per_kg": null, "avg_actual_per_kg": null}

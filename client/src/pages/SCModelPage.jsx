@@ -1,5 +1,4 @@
 import { Network, Layers, GitBranch, IndianRupee } from "lucide-react"
-import CosmicHero from "../components/shared/CosmicHero"
 import CosmicKPICard from "../components/shared/CosmicKPICard"
 import TierFlowDiagram from "../components/charts/TierFlowDiagram"
 import StreamwiseComparison from "../components/charts/StreamwiseComparison"
@@ -12,17 +11,10 @@ export default function SCModelPage() {
 
   return (
     <div className="page-container">
-      <CosmicHero
-        eyebrow="Accenture S&C · Network & Flow"
-        title="Supply Chain Model"
-        subtitle="End-to-end 8-tier value flow · click any tier or road to inspect · streamwise differentiator · top lanes"
-        stats={[
-          { icon: Layers,      label: "Tiers",     value: "8",                                 glow: "rgba(161,0,255,0.5)" },
-          { icon: GitBranch,   label: "Lanes",     value: formatNumber(data?.unique_lanes),    glow: "rgba(59,130,246,0.5)" },
-          { icon: Network,     label: "Shipments", value: formatNumber(data?.total_shipments), glow: "rgba(139,92,246,0.5)" },
-          { icon: IndianRupee, label: "Cost",      value: formatCurrency(data?.total_cost),    glow: "rgba(251,191,36,0.5)" },
-        ]}
-      />
+      <div>
+        <h1 className="page-title">Supply Chain Model</h1>
+        <p className="page-subtitle">End-to-end 8-tier value flow · click any tier or road to inspect · streamwise differentiator · top lanes</p>
+      </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <CosmicKPICard label="Tiers Active"    value="8"                                   icon={Layers}     accentClr="#A100FF" loading={isLoading} />

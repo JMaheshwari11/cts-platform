@@ -47,7 +47,7 @@ def run_carrier_switch_simulator(from_carrier_id: str, to_carrier_id: str) -> di
 CARRIER_TOOLS = [
     {
         "name": "get_carrier_performance",
-        "description": "Get per-carrier scorecard: shipments, total cost, ₹/kg, OTD%, utilization.",
+        "description": "Get per-carrier scorecard: shipments, total cost, $/kg, OTD%, utilization.",
         "parameters": {"type": "object", "properties": {}, "required": []},
         "fn": get_carrier_performance,
     },

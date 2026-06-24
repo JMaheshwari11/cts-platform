@@ -3,6 +3,7 @@ import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
 import { Route } from "lucide-react"
 import { formatNumber, formatCurrency, formatPct } from "../../utils/formatters"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function TopCorridorsBars() {
   const { data, isLoading, error, refetch } = useTopRoutes(10)
@@ -17,7 +18,7 @@ export default function TopCorridorsBars() {
     <div className="chart-card">
       <div className="flex items-center gap-2 mb-1">
         <Route className="w-5 h-5 text-accenture-purple" />
-        <h3 className="chart-title mb-0">Top Corridors</h3>
+        <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Top Corridors<InfoTooltip label="Top Corridors" size="xs" /></h3>
       </div>
       <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">
         Highest-volume origin → destination lanes with cost, distance, and OTD
@@ -39,7 +40,7 @@ export default function TopCorridorsBars() {
                 </div>
                 <div className="flex items-center gap-3 text-[11px] flex-shrink-0">
                   <span className="text-gray-500">{r.avg_distance_km?.toFixed(0)} km</span>
-                  <span className="text-gray-500">₹/kg <b className="text-gray-900 dark:text-white">{r.avg_cost_per_kg?.toFixed(1)}</b></span>
+                  <span className="text-gray-500">$/kg <b className="text-gray-900 dark:text-white">{r.avg_cost_per_kg?.toFixed(1)}</b></span>
                   <span className="text-gray-500">OTD <b className="text-gray-900 dark:text-white">{formatPct(r.avg_otd_pct)}</b></span>
                   <span className="font-bold text-accenture-purple min-w-[50px] text-right">{formatNumber(r.shipments)}</span>
                 </div>

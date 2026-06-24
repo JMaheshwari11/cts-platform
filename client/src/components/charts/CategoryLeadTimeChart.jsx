@@ -3,6 +3,7 @@ import { useLeadtimeByCategory } from "../../hooks/useProductsData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function CategoryLeadTimeChart() {
   const { data, isLoading, error, refetch } = useLeadtimeByCategory()
@@ -26,6 +27,6 @@ export default function CategoryLeadTimeChart() {
                formatter: (p) => `${p.value?.toFixed(1)}d` },
     }],
   }
-  return <div className="chart-card"><h3 className="chart-title">Avg Lead Time by Category</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Avg Lead Time by Category<InfoTooltip label="Avg Lead Time by Category" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 340 }} /></div>
 }

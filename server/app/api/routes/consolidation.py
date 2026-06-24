@@ -1,4 +1,4 @@
-"""Consolidation Hub — opportunities, scores, savings potential."""
+"""Consolidation Hub - opportunities, scores, savings potential."""
 
 from fastapi import APIRouter
 from app.data.cache import cache
@@ -8,7 +8,6 @@ router = APIRouter(prefix="/consolidation", tags=["consolidation"])
 
 @router.get("/summary")
 def consolidation_summary():
-    """High-level consolidation metrics."""
     df = cache.df
     total = len(df)
     consolidated = int(df["consolidation_flag"].sum())
@@ -28,7 +27,6 @@ def consolidation_summary():
 
 @router.get("/score-distribution")
 def score_distribution():
-    """Consolidation score histogram (0-100 in buckets of 10)."""
     df = cache.df.copy()
     df["score_bucket"] = (df["consolidation_score"] // 10 * 10).astype(int)
     grp = df.groupby("score_bucket").size().reset_index(name="shipments")
@@ -37,7 +35,10 @@ def score_distribution():
 
 @router.get("/by-route")
 def consolidation_by_route():
-    """Top routes with highest consolidation opportunity."""
+    """Top routes with highest consolidation opportunity.
+    
+    Utilization returned as PERCENTAGE.
+    """
     df = cache.df
     grp = df.groupby(["origin_city", "destination_city"], observed=True).agg(
         shipments=("shipment_id", "count"),
@@ -45,7 +46,9 @@ def consolidation_by_route():
         avg_score=("consolidation_score", "mean"),
         avg_utilization=("vehicle_utilization_weight", "mean"),
         total_cost=("total_cost", "sum"),
-    ).reset_index().round(2)
+    ).reset_index()
+    grp["avg_utilization"] = (grp["avg_utilization"] * 100).round(2)  # FIX
+    grp = grp.round(2)
     grp["consolidation_rate"] = (grp["consolidated_shipments"] / grp["shipments"] * 100).round(2)
     grp = grp.sort_values("shipments", ascending=False).head(20)
     return grp.to_dict(orient="records")
@@ -53,7 +56,6 @@ def consolidation_by_route():
 
 @router.get("/by-carrier")
 def consolidation_by_carrier():
-    """Consolidation rate per carrier."""
     df = cache.df
     grp = df.groupby("carrier_name", observed=True).agg(
         shipments=("shipment_id", "count"),
@@ -67,7 +69,6 @@ def consolidation_by_carrier():
 
 @router.get("/opportunity-funnel")
 def opportunity_funnel():
-    """Funnel: Total → Could-be-consolidated → Actually consolidated."""
     df = cache.df
     total = len(df)
     could_consolidate = int(df["consolidation_opportunity_flag"].sum()) if "consolidation_opportunity_flag" in df.columns else 0

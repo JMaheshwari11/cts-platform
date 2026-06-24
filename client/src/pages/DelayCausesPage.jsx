@@ -1,5 +1,4 @@
 import { AlertTriangle, Clock, TrendingDown, Activity } from "lucide-react"
-import CosmicHero from "../components/shared/CosmicHero"
 import CosmicKPICard from "../components/shared/CosmicKPICard"
 import DelayPareto from "../components/charts/DelayPareto"
 import DelayHeatmap from "../components/charts/DelayHeatmap"
@@ -12,17 +11,10 @@ export default function DelayCausesPage() {
 
   return (
     <div className="page-container">
-      <CosmicHero
-        eyebrow="Accenture S&C · Optimization Insights"
-        title="Delay Root Causes"
-        subtitle="Pareto analysis of delay drivers, monthly heatmap, and carrier-level delay performance"
-        stats={[
-          { icon: AlertTriangle, label: "Delayed",    value: formatNumber(data?.delayed_shipments), glow: "rgba(239,68,68,0.5)" },
-          { icon: TrendingDown,  label: "Delay Rate", value: formatPct(data?.delay_rate_pct),       glow: "rgba(239,68,68,0.5)" },
-          { icon: Clock,         label: "Avg Delay",  value: formatDays(data?.avg_delay_days),      glow: "rgba(245,158,11,0.5)" },
-          { icon: Activity,      label: "OTD %",      value: formatPct(data?.otd_pct),              glow: "rgba(16,185,129,0.5)" },
-        ]}
-      />
+      <div>
+        <h1 className="page-title">Delay Root Causes</h1>
+        <p className="page-subtitle">Pareto analysis of delay drivers, monthly heatmap, and carrier-level delay performance</p>
+      </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <CosmicKPICard label="Delayed Shipments" value={formatNumber(data?.delayed_shipments)} icon={AlertTriangle} accentClr="#EF4444" loading={isLoading} />

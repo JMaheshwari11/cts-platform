@@ -3,6 +3,7 @@ import { useCategoryMix } from "../../hooks/useProductsData"
 import useThemeTokens from "../../hooks/useThemeTokens"
 import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function CategoryMixDonut() {
   const { data, isLoading, error, refetch } = useCategoryMix()
@@ -13,7 +14,7 @@ export default function CategoryMixDonut() {
 
   const option = {
     tooltip: { ...tooltip, trigger: "item",
-      formatter: (p) => `${p.name}<br/><b>₹${(p.value/1e7).toFixed(2)}Cr</b> · ${p.percent}%` },
+      formatter: (p) => `${p.name}<br/><b>$${(p.value/1e6).toFixed(2)}M</b> · ${p.percent}%` },
     legend: { ...legend, orient: "vertical", right: 0, top: "middle" },
     color: palette,
     series: [{
@@ -24,6 +25,6 @@ export default function CategoryMixDonut() {
       data: data.map(d => ({ name: d.category, value: d.total_cost })),
     }],
   }
-  return <div className="chart-card"><h3 className="chart-title">Category Mix (by Cost)</h3>
+  return <div className="chart-card"><h3 className="chart-title" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Category Mix (by Cost)<InfoTooltip label="Category Mix (by Cost)" size="xs" /></h3>
     <ReactECharts option={option} style={{ height: 320 }} /></div>
 }

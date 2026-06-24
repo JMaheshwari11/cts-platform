@@ -3,6 +3,7 @@ import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
 import { Route } from "lucide-react"
 import { formatNumber, formatCurrency } from "../../utils/formatters"
+import InfoTooltip from "../shared/InfoTooltip"
 
 export default function TopLanesTable() {
   const { data, isLoading, error, refetch } = useEdges()
@@ -15,7 +16,7 @@ export default function TopLanesTable() {
     <div className="chart-card">
       <div className="flex items-center gap-2 mb-4">
         <Route className="w-5 h-5 text-accenture-purple" />
-        <h3 className="chart-title mb-0">Top 15 Lanes by Volume</h3>
+        <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Top 15 Lanes by Volume<InfoTooltip label="Top 15 Lanes by Volume" size="xs" /></h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">

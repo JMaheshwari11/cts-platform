@@ -15,7 +15,7 @@ const TIER_META = {
   RD: { icon: Warehouse, gradient: "from-cyan-500 via-blue-600 to-sky-700",         glow: "rgba(14,165,233,0.5)",  desc: "Regional Distribution Center", short: "State-level distribution clusters" },
   LD: { icon: Package,   gradient: "from-emerald-500 via-teal-600 to-teal-800",     glow: "rgba(20,184,166,0.5)",  desc: "Local Distribution",           short: "City/district depots, last-mile staging" },
   DT: { icon: Truck,     gradient: "from-amber-500 via-orange-600 to-orange-800",   glow: "rgba(249,115,22,0.5)",  desc: "Distributors",                 short: "B2B partners, channel partners" },
-  RT: { icon: Store,     gradient: "from-rose-500 via-red-600 to-red-800",          glow: "rgba(244,63,94,0.5)",   desc: "Retailers",                    short: "Modern trade, general trade, e-commerce" },
+  RT: { icon: Store,     gradient: "from-rose-500 via-red-600 to-red-800",          glow: "rgba(244,63,94,0.5)",   desc: "End Customers",                    short: "End consumers — modern trade, general trade, e-commerce, B2C buyers" },
 }
 
 const formatNumber = (n) => {
@@ -26,9 +26,11 @@ const formatNumber = (n) => {
 }
 const formatCurrency = (n) => {
   if (n == null) return "—"
-  if (n >= 1e7) return `₹${(n / 1e7).toFixed(1)}Cr`
-  if (n >= 1e5) return `₹${(n / 1e5).toFixed(1)}L`
-  return `₹${n.toLocaleString()}`
+  const usd = Number(n) / 83
+  if (usd >= 1e9) return `${(usd / 1e9).toFixed(1)}B`
+  if (usd >= 1e6) return `${(usd / 1e6).toFixed(1)}M`
+  if (usd >= 1e3) return `${(usd / 1e3).toFixed(0)}K`
+  return `${usd.toFixed(0)}`
 }
 
 export default function TierFlowDiagram({ compact = false }) {
@@ -370,7 +372,7 @@ export default function TierFlowDiagram({ compact = false }) {
                           backdropFilter: "blur(8px)",
                         }}
                       >
-                        ₹{tx.avg_cost_per_kg?.toFixed(1)}/kg
+                        ${tx.avg_cost_per_kg?.toFixed(1)}/kg
                       </div>
                     </div>
 
@@ -454,7 +456,7 @@ export default function TierFlowDiagram({ compact = false }) {
                 <DetailStat icon={Route} label="Avg Distance" value={`${activeTransition.avg_distance_km?.toFixed(0)} km`} />
                 <DetailStat icon={TrendingUp} label="Shipments" value={formatNumber(activeTransition.shipments)} />
                 <DetailStat icon={IndianRupee} label="Total Cost" value={formatCurrency(activeTransition.total_cost)} />
-                <DetailStat icon={IndianRupee} label="₹/kg" value={activeTransition.avg_cost_per_kg?.toFixed(2)} />
+                <DetailStat icon={IndianRupee} label="$/kg" value={activeTransition.avg_cost_per_kg?.toFixed(2)} />
                 <DetailStat icon={Gauge} label="Util" value={`${activeTransition.avg_util?.toFixed(1)}%`} />
                 <DetailStat icon={Clock} label="OTD %" value={`${activeTransition.avg_otd?.toFixed(1)}%`} />
               </div>
@@ -483,7 +485,7 @@ export default function TierFlowDiagram({ compact = false }) {
             </div>
             <div className="flex items-center gap-3">
               <div className="w-3 h-3 rounded-full bg-gradient-to-br from-amber-500 to-orange-700" />
-              <span className="text-white/80"><b className="text-white">Downstream (DT → RT)</b> · distributors deliver to stores</span>
+              <span className="text-white/80"><b className="text-white">Downstream (DT → RT)</b> · distributors deliver to customers</span>
             </div>
           </div>
           <div className="pt-3 border-t border-white/10 grid grid-cols-3 gap-3 text-center">

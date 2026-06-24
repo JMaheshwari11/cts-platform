@@ -4,6 +4,7 @@ import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
 import { Boxes } from "lucide-react"
 import { formatNumber, formatCurrency, formatPct } from "../../utils/formatters"
+import InfoTooltip from "../shared/InfoTooltip"
 
 const SORTS = [
   { key: "total_cost", label: "Total Cost" },
@@ -24,7 +25,7 @@ export default function TopSKUsTable() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Boxes className="w-5 h-5 text-accenture-purple" />
-          <h3 className="chart-title mb-0">Top 15 SKUs</h3>
+          <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Top 15 SKUs<InfoTooltip label="Top 15 SKUs" size="xs" /></h3>
         </div>
         <select value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="control text-xs">
           {SORTS.map(o => <option key={o.key} value={o.key}>Sort by {o.label}</option>)}

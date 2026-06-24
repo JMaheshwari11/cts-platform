@@ -16,7 +16,7 @@ export default function CarrierLeaderboard() {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Award className="w-5 h-5 text-accenture-purple" />
-          <h3 className="chart-title mb-0">Top 5 Carriers by Volume</h3>
+          <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Top 5 Carriers by Volume<InfoTooltip label="Top 5 Carriers by Volume" size="xs" /></h3>
         </div>
         <div className="flex items-center gap-3 text-[10px] uppercase font-semibold" style={{ color: "var(--text-faint)" }}>
           <span className="flex items-center gap-1">OTD % <InfoTooltip label="On-Time Delivery" /></span>

@@ -4,12 +4,13 @@ import LoadingSkeleton from "../shared/LoadingSkeleton"
 import ErrorState from "../shared/ErrorState"
 import { ArrowUpDown, Award } from "lucide-react"
 import { formatCurrency, formatNumber, formatPct } from "../../utils/formatters"
+import InfoTooltip from "../shared/InfoTooltip"
 
 const COLUMNS = [
   { key: "carrier_name",       label: "Carrier",   fmt: v => v,                          align: "left"  },
   { key: "shipments",          label: "Shipments", fmt: formatNumber,                    align: "right" },
   { key: "total_cost",         label: "Total Cost",fmt: formatCurrency,                  align: "right" },
-  { key: "avg_cost_per_kg",    label: "₹/Kg",      fmt: v => formatCurrency(v, false),   align: "right" },
+  { key: "avg_cost_per_kg",    label: "$/Kg",      fmt: v => formatCurrency(v, false),   align: "right" },
   { key: "otd_pct",            label: "OTD %",     fmt: formatPct,                       align: "right" },
   { key: "avg_util_weight",    label: "Util %",    fmt: formatPct,                       align: "right" },
   { key: "avg_sustainability", label: "Sustain.",  fmt: v => v?.toFixed(1),              align: "right" },
@@ -37,7 +38,7 @@ export default function CarrierScorecard() {
     <div className="chart-card">
       <div className="flex items-center gap-2 mb-4">
         <Award className="w-5 h-5 text-accenture-purple" />
-        <h3 className="chart-title mb-0">Carrier Performance Scorecard</h3>
+        <h3 className="chart-title mb-0" style={{display: "inline-flex", alignItems: "center", gap: "6px"}}>Carrier Performance Scorecard<InfoTooltip label="Carrier Performance Scorecard" size="xs" /></h3>
       </div>
       <div className="overflow-x-auto">
         <table className="data-table">
